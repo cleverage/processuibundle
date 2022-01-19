@@ -2,6 +2,7 @@
 
 namespace CleverAge\ProcessUiBundle\Monolog\Handler;
 
+use Symfony\Contracts\Service\Attribute\Required;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\Local\LocalFilesystemAdapter;
@@ -14,10 +15,8 @@ class ProcessLogHandler extends AbstractProcessingHandler
     private ?string $currentProcessCode = null;
     private ?Filesystem $filesystem = null;
 
-    /**
-     * @required
-     */
-    public function setLogDir(string $processLogDir): void
+    #[Required]
+    public function setLogDir(string $processLogDir) : void
     {
         $this->logDir = $processLogDir;
     }

@@ -2,6 +2,7 @@
 
 namespace CleverAge\ProcessUiBundle\Repository;
 
+use Symfony\Contracts\Service\Attribute\Required;
 use CleverAge\ProcessBundle\Registry\ProcessConfigurationRegistry;
 use CleverAge\ProcessUiBundle\Entity\Process;
 use CleverAge\ProcessUiBundle\Manager\ProcessUiConfigurationManager;
@@ -16,18 +17,14 @@ class ProcessRepository extends ServiceEntityRepository
     private ProcessUiConfigurationManager $processUiConfigurationManager;
     private ProcessConfigurationRegistry $processConfigurationRegistry;
 
-    /**
-     * @required
-     */
-    public function setProcessUiConfigurationManager(ProcessUiConfigurationManager $processUiConfigurationManager): void
+    #[Required]
+    public function setProcessUiConfigurationManager(ProcessUiConfigurationManager $processUiConfigurationManager) : void
     {
         $this->processUiConfigurationManager = $processUiConfigurationManager;
     }
 
-    /**
-     * @required
-     */
-    public function setProcessConfigurationRegistry(ProcessConfigurationRegistry $processConfigurationRegistry): void
+    #[Required]
+    public function setProcessConfigurationRegistry(ProcessConfigurationRegistry $processConfigurationRegistry) : void
     {
         $this->processConfigurationRegistry = $processConfigurationRegistry;
     }

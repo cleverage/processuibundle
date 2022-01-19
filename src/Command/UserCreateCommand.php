@@ -20,18 +20,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 final class UserCreateCommand extends Command
 {
-    private ValidatorInterface $validator;
-    private UserPasswordHasherInterface $passwordEncoder;
-    private EntityManagerInterface $em;
-
     public function __construct(
-        ValidatorInterface $validator,
-        UserPasswordHasherInterface $passwordEncoder,
-        EntityManagerInterface $em
+        private ValidatorInterface $validator,
+        private UserPasswordHasherInterface $passwordEncoder,
+        private EntityManagerInterface $em
     ) {
-        $this->validator = $validator;
-        $this->passwordEncoder = $passwordEncoder;
-        $this->em = $em;
         parent::__construct();
     }
 
@@ -61,10 +54,7 @@ final class UserCreateCommand extends Command
     }
 
     /**
-     * @param string $question
-     * @param SymfonyStyle $style
      * @param array <int, mixed> $constraints
-     * @return mixed
      */
     private function ask(string $question, SymfonyStyle $style, array $constraints = []): mixed
     {

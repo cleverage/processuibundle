@@ -21,27 +21,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class ProcessEventSubscriber implements EventSubscriberInterface
 {
     private array $processExecution = [];
-    private EntityManagerInterface $entityManager;
-    private ProcessLogHandler $processLogHandler;
-    private MessageBusInterface $messageBus;
-    private ProcessUiConfigurationManager $processUiConfigurationManager;
-    private string $processLogDir;
-    private bool $indexLogs;
 
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        ProcessLogHandler $processLogHandler,
-        MessageBusInterface $messageBus,
-        ProcessUiConfigurationManager $processUiConfigurationManager,
-        string $processLogDir,
-        bool $indexLogs
-    ) {
-        $this->entityManager = $entityManager;
-        $this->processLogHandler = $processLogHandler;
-        $this->messageBus = $messageBus;
-        $this->processUiConfigurationManager = $processUiConfigurationManager;
-        $this->processLogDir = $processLogDir;
-        $this->indexLogs = $indexLogs;
+    public function __construct(private EntityManagerInterface $entityManager, private ProcessLogHandler $processLogHandler, private MessageBusInterface $messageBus, private ProcessUiConfigurationManager $processUiConfigurationManager, private string $processLogDir, private bool $indexLogs)
+    {
     }
 
     public static function getSubscribedEvents(): array
@@ -80,7 +62,7 @@ class ProcessEventSubscriber implements EventSubscriberInterface
         $logFilename =  sprintf(
             'process_%s_%s.log',
             $event->getProcessCode(),
-            sha1(uniqid((string)mt_rand(), true))
+            sha1(uniqid((string)random_int(0, mt_getrandmax()), true))
         );
         $this->processLogHandler->setLogFilename($logFilename, $event->getProcessCode());
         $this->processLogHandler->setCurrentProcessCode($event->getProcessCode());

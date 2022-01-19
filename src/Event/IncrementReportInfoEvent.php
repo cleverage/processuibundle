@@ -5,13 +5,9 @@ namespace CleverAge\ProcessUiBundle\Event;
 class IncrementReportInfoEvent
 {
     public const NAME = 'cleverage_process_ui.increment_report_info';
-    private string $key;
-    private string $processCode;
 
-    public function __construct(string $processCode, string $key)
+    public function __construct(private string $processCode, private string $key)
     {
-        $this->key = $key;
-        $this->processCode = $processCode;
     }
 
     public function getKey(): string

@@ -12,11 +12,9 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 class LogIndexerHandler implements MessageHandlerInterface
 {
     public const INDEX_LOG_RECORD = 'index_log_record';
-    private ManagerRegistry $managerRegistry;
 
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(private ManagerRegistry $managerRegistry)
     {
-        $this->managerRegistry = $managerRegistry;
     }
 
     public function __invoke(LogIndexerMessage $logIndexerMessage): void

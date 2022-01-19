@@ -2,6 +2,7 @@
 
 namespace CleverAge\ProcessUiBundle\Controller\Crud;
 
+use Symfony\Contracts\Service\Attribute\Required;
 use CleverAge\ProcessUiBundle\Entity\ProcessExecution;
 use CleverAge\ProcessUiBundle\Manager\ProcessUiConfigurationManager;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -23,26 +24,20 @@ class ProcessExecutionCrudController extends AbstractCrudController
     private string $processLogDir;
     private ProcessUiConfigurationManager $processUiConfigurationManager;
 
-    /**
-     * @required
-     */
-    public function setIndexLogs(bool $indexLogs): void
+    #[Required]
+    public function setIndexLogs(bool $indexLogs) : void
     {
         $this->indexLogs = $indexLogs;
     }
 
-    /**
-     * @required
-     */
-    public function setProcessLogDir(string $processLogDir): void
+    #[Required]
+    public function setProcessLogDir(string $processLogDir) : void
     {
         $this->processLogDir = $processLogDir;
     }
 
-    /**
-     * @required true
-     */
-    public function setProcessUiConfigurationManager(ProcessUiConfigurationManager $processUiConfigurationManager): void
+    #[Required]
+    public function setProcessUiConfigurationManager(ProcessUiConfigurationManager $processUiConfigurationManager) : void
     {
         $this->processUiConfigurationManager = $processUiConfigurationManager;
     }
@@ -74,13 +69,11 @@ class ProcessExecutionCrudController extends AbstractCrudController
             'target',
             'startDate',
             'endDate',
-            IntegerField::new('status')->formatValue(static function (int $value) {
-                /** @phpstan-ignore-next-line */
-                return match ($value) {
-                    ProcessExecution::STATUS_FAIL => '<button class="btn btn-danger btn-lm">failed</button>',
-                    ProcessExecution::STATUS_START => '<button class="btn btn-warning btn-lm">started</button>',
-                    ProcessExecution::STATUS_SUCCESS => '<button class="btn btn-success btn-lm">succcess</button>',
-                };
+            IntegerField::new('status')->formatValue(static fn(int $value) => /** @phpstan-ignore-next-line */
+match ($value) {
+                ProcessExecution::STATUS_FAIL => '<button class="btn btn-danger btn-lm">failed</button>',
+                ProcessExecution::STATUS_START => '<button class="btn btn-warning btn-lm">started</button>',
+                ProcessExecution::STATUS_SUCCESS => '<button class="btn btn-success btn-lm">succcess</button>',
             }),
         ];
     }

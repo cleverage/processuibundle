@@ -2,6 +2,7 @@
 
 namespace CleverAge\ProcessUiBundle\Command;
 
+use Symfony\Contracts\Service\Attribute\Required;
 use CleverAge\ProcessUiBundle\Entity\ProcessExecution;
 use CleverAge\ProcessUiBundle\Repository\ProcessExecutionRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -18,18 +19,14 @@ class PurgeProcessExecution extends Command
     private ManagerRegistry $managerRegistry;
     private string $processLogDir;
 
-    /**
-     * @required
-     */
-    public function setManagerRegistry(ManagerRegistry $managerRegistry): void
+    #[Required]
+    public function setManagerRegistry(ManagerRegistry $managerRegistry) : void
     {
         $this->managerRegistry = $managerRegistry;
     }
 
-    /**
-     * @required
-     */
-    public function setProcessLogDir(string $processLogDir): void
+    #[Required]
+    public function setProcessLogDir(string $processLogDir) : void
     {
         $this->processLogDir = $processLogDir;
     }

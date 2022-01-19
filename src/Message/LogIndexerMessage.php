@@ -5,22 +5,9 @@ namespace CleverAge\ProcessUiBundle\Message;
 class LogIndexerMessage
 {
     public const DEFAULT_OFFSET = 2500;
-    
-    private int $processExecutionId;
-    private string $logPath;
-    private int $start;
-    private int $offset;
 
-    public function __construct(
-        int $processExecutionId,
-        string $logPath,
-        int $start,
-        int $offset = self::DEFAULT_OFFSET
-    ) {
-        $this->processExecutionId = $processExecutionId;
-        $this->logPath = $logPath;
-        $this->start = $start;
-        $this->offset = $offset;
+    public function __construct(private int $processExecutionId, private string $logPath, private int $start, private int $offset = self::DEFAULT_OFFSET)
+    {
     }
 
     public function getProcessExecutionId(): int

@@ -10,15 +10,11 @@ use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class ProcessRunHandler implements MessageHandlerInterface
 {
-    private ExecuteProcessCommand $command;
-
-    public function __construct(ExecuteProcessCommand $command)
+    public function __construct(private ExecuteProcessCommand $command)
     {
-        $this->command = $command;
     }
 
     /**
-     * @param ProcessRunMessage $processRunMessage
      * @throws Exception
      */
     public function __invoke(ProcessRunMessage $processRunMessage): void

@@ -13,11 +13,8 @@ class ProcessUiConfigurationManager
     public const UI_OPTION_TARGET = 'target';
     public const UI_OPTION_RUN = 'ui_run';
 
-    private ProcessConfigurationRegistry $processConfigurationRegistry;
-
-    public function __construct(ProcessConfigurationRegistry $processConfigurationRegistry)
+    public function __construct(private ProcessConfigurationRegistry $processConfigurationRegistry)
     {
-        $this->processConfigurationRegistry = $processConfigurationRegistry;
     }
 
     /**
@@ -25,9 +22,7 @@ class ProcessUiConfigurationManager
      */
     public function getProcessChoices(): array
     {
-        return array_map(static function (ProcessConfiguration $configuration) {
-            return $configuration->getCode();
-        }, $this->processConfigurationRegistry->getProcessConfigurations());
+        return array_map(static fn(ProcessConfiguration $configuration) => $configuration->getCode(), $this->processConfigurationRegistry->getProcessConfigurations());
     }
 
     /**
@@ -74,7 +69,6 @@ class ProcessUiConfigurationManager
     }
 
     /**
-     * @param Process|string $process
      * @return array <string, string>
      */
     private function resolveUiOptions(Process|string $process): array

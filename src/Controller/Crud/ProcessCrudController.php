@@ -2,6 +2,7 @@
 
 namespace CleverAge\ProcessUiBundle\Controller\Crud;
 
+use Symfony\Contracts\Service\Attribute\Required;
 use CleverAge\ProcessUiBundle\Entity\Process;
 use CleverAge\ProcessUiBundle\Entity\ProcessExecution;
 use CleverAge\ProcessUiBundle\Manager\ProcessUiConfigurationManager;
@@ -24,10 +25,8 @@ class ProcessCrudController extends AbstractCrudController
 {
     private ProcessUiConfigurationManager $processUiConfigurationManager;
 
-    /**
-     * @required
-     */
-    public function setProcessUiConfigurationManager(ProcessUiConfigurationManager $processUiConfigurationManager): void
+    #[Required]
+    public function setProcessUiConfigurationManager(ProcessUiConfigurationManager $processUiConfigurationManager) : void
     {
         $this->processUiConfigurationManager = $processUiConfigurationManager;
     }
@@ -57,14 +56,12 @@ class ProcessCrudController extends AbstractCrudController
             'source',
             'target',
             'lastExecutionDate',
-            IntegerField::new('lastExecutionStatus')->formatValue(static function (?int $value) {
-                /** @phpstan-ignore-next-line */
-                return match ($value) {
-                    ProcessExecution::STATUS_FAIL => '<button class="btn btn-danger btn-lm">failed</button>',
-                    ProcessExecution::STATUS_START => '<button class="btn btn-warning btn-lm">started</button>',
-                    ProcessExecution::STATUS_SUCCESS => '<button class="btn btn-success btn-lm">success</button>',
-                    null => ''
-                };
+            IntegerField::new('lastExecutionStatus')->formatValue(static fn(?int $value) => /** @phpstan-ignore-next-line */
+match ($value) {
+                ProcessExecution::STATUS_FAIL => '<button class="btn btn-danger btn-lm">failed</button>',
+                ProcessExecution::STATUS_START => '<button class="btn btn-warning btn-lm">started</button>',
+                ProcessExecution::STATUS_SUCCESS => '<button class="btn btn-success btn-lm">success</button>',
+                null => ''
             }),
         ];
     }
@@ -77,9 +74,7 @@ class ProcessCrudController extends AbstractCrudController
         $runProcess = Action::new('run', '', 'fa fa-rocket')
             ->linkToCrudAction('runProcessAction');
         $runProcess->setHtmlAttributes(['data-toggle' => 'tooltip', 'title' => 'Run process in background']);
-        $runProcess->displayIf(function (Process $process) {
-            return $this->processUiConfigurationManager->canRun($process);
-        });
+        $runProcess->displayIf(fn(Process $process) => $this->processUiConfigurationManager->canRun($process));
         $viewHistoryAction = Action::new('viewHistory', '', 'fa fa-history')
             ->linkToCrudAction('viewHistoryAction');
         $viewHistoryAction->setHtmlAttributes(['data-toggle' => 'tooltip', 'title' => 'View executions history']);
@@ -107,7 +102,7 @@ class ProcessCrudController extends AbstractCrudController
                     'Process has been added to queue. It will start as soon as possible'
                 );
             }
-        } catch (Exception $e) {
+        } catch (Exception) {
             $this->addFlash('warning', 'Cannot run process.');
         }
 
@@ -115,7 +110,7 @@ class ProcessCrudController extends AbstractCrudController
         $routeBuilder = $this->get(AdminUrlGenerator::class);
 
         return $this->redirect(
-            $routeBuilder->setController(__CLASS__)->setAction(Action::INDEX)->generateUrl()
+            $routeBuilder->setController(self::class)->setAction(Action::INDEX)->generateUrl()
         );
     }
 
